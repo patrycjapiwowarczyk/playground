@@ -40,3 +40,29 @@ const options = {
 };
 
 const flatpickrInput = flatpickr('#datetime-picker', options);
+
+function addLeadingZero(value) {
+  return value.toString().padStart(2, '0');
+}
+
+let dateTimer;
+
+function countdown() {
+  const timeToCount = flatpickrInput.selectedDates[0] - new Date();
+  if (timeToCount <= 0) {
+    clearInterval(dateTimer);
+    startBtn.disabled = false;
+    return;
+  }
+  const { days, hours, minutes, seconds } = convertMs(timeToCount);
+  daysNumber.innerHTML = addLeadingZero(days);
+  hoursNumber.innerHTML = addLeadingZero(hours);
+  minutesNumber.innerHTML = addLeadingZero(minutes);
+  secondsNumber.innerHTML = addLeadingZero(seconds);
+}
+
+startBtn.addEventListener('click', () => {
+  countdown();
+  startBtn.disabled = true;
+  dateTimer = setInterval(countdown, 1000);
+});
